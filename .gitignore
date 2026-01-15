@@ -1,0 +1,31 @@
+# Dependencies
+node_modules
+client/node_modules
+server/node_modules
+
+# Python
+__pycache__/
+*.pkl
+*.pyc
+.ipynb_checkpoints/
+server/__pycache__
+ml/__pycache__
+
+# Environment
+.env
+.DS_Store
+
+# Build
+dist/
+build/
+
+# Uploads
+uploads/
+
+# Data
+Data/genres_original/
+Data/images_original/
+
+# Misc
+*.log
+database.json

@@ -1,0 +1,33 @@
+{
+  "name": "music-classification-genre-model",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "node server/index.js",
+    "client": "cd client && npm run dev",
+    "setup": "python3 ml/train_model.py"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/A7med580/music-classification-genre-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/A7med580/music-classification-genre-/issues"
+  },
+  "homepage": "https://github.com/A7med580/music-classification-genre-#readme",
+  "description": "",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "body-parser": "^2.2.2",
+    "concurrently": "^9.2.1",
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.0.2"
+  }
+}

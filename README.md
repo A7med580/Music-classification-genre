@@ -1,60 +1,80 @@
+# AI Music Genre Classification
 
-# Music Genre Classification
+A modern, high-performance web application that classifies music genres using Machine Learning. This project features a React-based "Premium" interface, a Node.js backend, and a Python-powered ML engine.
 
-This project involves building a machine learning model to classify music tracks into different genres. The model is trained on a dataset of audio features extracted from various music files and uses classification algorithms to predict the genre of a new track.
+## 🚀 Overview
 
-## Project Overview
+This project uses a **Hybrid Architecture** to leverage the best tools for each job:
 
-The goal of this project is to create a model that can accurately classify music into genres based on features like tempo, rhythm, pitch, and more. It leverages machine learning techniques and audio processing to achieve this goal.
+1.  **Frontend (React + Vite)**:
+    - Provides a modern, responsive, and polished user interface.
+    - Employs **Glassmorphism** design principles for a premium feel.
+    - Communicates with the backend via a REST API.
 
-## Features
+2.  **Backend (Node.js + Express)**:
+    - Serves as the orchestrator.
+    - Manages file uploads and user authentication.
+    - Handles data persistence via a file-based "Virtual Database".
+    - Executes Python ML scripts as subprocesses for real-time classification.
 
-- **Audio Feature Extraction**: Uses libraries to extract key features from audio files, such as tempo, rhythm, and frequency.
-- **Genre Classification**: Implements classification algorithms (e.g., SVM, Random Forest, etc.) to categorize the audio files into predefined genres.
-- **Model Evaluation**: Evaluates the model performance using accuracy, precision, recall, and other metrics.
+3.  **Machine Learning (Python)**:
+    - Pure logic layer focused on signal processing.
+    - Uses `Librosa` for advanced audio feature extraction (MFCCs, Spectral features).
+    - Utilizes a `Random Forest` classifier trained on the GTZAN dataset to predict genres.
 
-## Technologies Used
+### 🗄️ Virtual Database (Persistence)
+Instead of requiring a heavy database setup like MongoDB or PostgreSQL, we implemented a **Virtual Database** using a file-based approach (`server/database.json`). This ensures history is preserved across sessions without any installation overhead.
 
-- **Python**: The core programming language used for the project.
-- **Librosa**: For audio signal processing and feature extraction.
-- **Scikit-learn**: For building and evaluating the classification model.
-- **Pandas & NumPy**: For data manipulation and analysis.
-- **Matplotlib & Seaborn**: For visualizing data and model performance.
+---
 
-## Installation
+## 📁 Project Structure
 
-1. Clone the repository:
+- `client/`: React/Vite source code (Frontend).
+- `server/`: Node.js Express API and DB logic (Backend).
+- `ml/`: Python scripts for model training (`train_model.py`) and prediction (`predict.py`).
+- `Data/`: Processed dataset used for training.
+- `research/`: Archived original notebooks and legacy files.
+
+---
+
+## 🛠️ Installation & Setup
+
+### Prerequisites
+- **Node.js**: [Download](https://nodejs.org/en/) (v16 or higher)
+- **Python**: [Download](https://www.python.org/downloads/) (v3.8 or higher)
+- **pip**: Python package manager.
+
+### First-Time Setup
+
+1. **Install Dependencies**:
+   Open your terminal in the project root and run:
    ```bash
-   git clone https://github.com/your-username/music-genre-classification.git
+   npm install && pip install -r ml/requirements.txt
    ```
 
-2. Install the required dependencies:
+2. **Train the AI Model**:
+   This step is crucial to generate the `model.pkl` file needed for predictions:
    ```bash
-   pip install -r requirements.txt
+   npm run setup
    ```
 
-3. Run the project:
-   ```bash
-   python main.py
-   ```
+---
 
-## How to Use
+## 🚦 Running the Application
 
-1. Add your music files to the `data` directory.
-2. Run the feature extraction script to process the audio files.
-3. Train the classification model using the provided dataset.
-4. Test the model by inputting a new music file to predict its genre.
+To start both the Frontend and Backend simultaneously, run:
 
-## Dataset
+```bash
+npm start
+```
 
-The project uses a dataset of labeled audio files, where each file is tagged with a genre. You can either use a publicly available dataset like the [GTZAN Genre Collection](http://marsyasweb.appspot.com/download/data_sets/) or any custom dataset of your choice.
+- **Backend**: Starts on port `3000`.
+- **Frontend**: Starts on port `5173`.
+- **Access**: Open your browser to [http://localhost:5173](http://localhost:5173).
 
-## Results
+---
 
-The model's accuracy and other performance metrics will be displayed after training. Visualization of the confusion matrix and feature importance will help understand how the model classifies different genres.
+## 🔧 Troubleshooting
 
-## Contributing
-
-If you would like to contribute to the project, feel free to fork the repository and submit a pull request with your improvements or suggestions.
-
-# music-classification-genre-
+- **Python Command**: If you encounter errors, ensure `python3` is in your PATH. You may need to adjust `server/index.js` to use `python` or `python3` depending on your environment.
+- **Port Conflict**: If port 3000 or 5173 is already in use, close the conflicting process and try again.
