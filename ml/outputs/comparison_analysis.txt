@@ -1,0 +1,21 @@
+
+
+ANALYSIS: Why CNN Outperforms GMM
+========================================
+
+CNN achieved 88.4% accuracy vs GMM's 71.4% (+17.0 percentage points).
+
+1. NON-LINEAR DECISION BOUNDARIES: CNNs learn complex, non-linear feature
+   interactions through multiple convolutional layers. GMMs assume each genre
+   follows a Gaussian distribution, which is a strong (often wrong) assumption.
+
+2. HIERARCHICAL FEATURE LEARNING: The CNN's convolutional layers learn
+   hierarchical patterns — first layer detects basic spectral patterns, deeper
+   layers combine them into genre-specific signatures.
+
+3. REGULARIZATION: Batch normalization and dropout prevent overfitting,
+   while GMMs can overfit to noise in high-dimensional feature spaces.
+
+4. GMM LIMITATIONS: With 50 features, GMMs struggle with the curse of
+   dimensionality. The diagonal covariance assumption loses inter-feature
+   correlations that the CNN naturally captures.

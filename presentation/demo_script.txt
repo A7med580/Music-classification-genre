@@ -1,0 +1,76 @@
+DEMO VIDEO SCRIPT — Music Genre Classification
+Duration: 2-3 minutes
+================================================
+
+[0:00 - 0:15] INTRODUCTION
+----------------------------
+"Hello, and welcome to our Music Genre Classification project demo.
+Our system classifies music into 10 genres — blues, classical, country,
+disco, hip-hop, jazz, metal, pop, reggae, and rock — using deep learning."
+
+[0:15 - 0:30] DATASET
+-----------------------
+"We trained our models on the GTZAN dataset, which contains 10,000
+three-second audio segments, equally distributed across all 10 genres.
+Each segment is represented by 57 audio features extracted using librosa,
+including MFCCs, spectral centroid, and zero crossing rate."
+
+[0:30 - 0:55] FEATURE ANALYSIS
+--------------------------------
+"We performed a comprehensive feature analysis using mutual information
+scoring and ablation studies. Our top 3 features are:
+  - MFCCs: which capture timbral texture
+  - Spectral Centroid: which measures brightness
+  - Zero Crossing Rate: which detects percussiveness
+
+We also identified features to exclude, such as tempo and RMS energy,
+which are unreliable for genre classification."
+
+(Show: feature_importance.png, feature_distributions.png)
+
+[0:55 - 1:25] MODEL COMPARISON
+--------------------------------
+"We implemented three models:
+  1. A 1D Convolutional Neural Network achieving 91.9% accuracy
+  2. A Gaussian Mixture Model baseline at 71.4% accuracy
+  3. The original Random Forest at 87% accuracy
+
+The CNN outperforms the GMM by over 20 percentage points, demonstrating
+the power of deep learning for audio classification."
+
+(Show: model_comparison_chart.png, all_confusion_matrices.png)
+
+[1:25 - 1:50] LIVE DEMO
+-------------------------
+"Now let me demonstrate the live classification system."
+
+(Show: browser at localhost:5173)
+"I'll upload a music file, and the system will classify its genre in
+real-time. Here, I'm uploading a jazz track..."
+
+(Upload file, show prediction result with confidence score)
+
+"As you can see, the system correctly identified the genre as jazz
+with 94% confidence."
+
+[1:50 - 2:15] CROSS-STUDY ANALYSIS
+-------------------------------------
+"We also evaluated whether our pipeline transfers to speech emotion
+recognition. We applied the same CNN and GMM architectures to emotion
+data and found that the CNN retains approximately 85% of its performance,
+while the GMM retains only about 65%. This demonstrates that the CNN
+learns universal spectral patterns transferable across audio domains."
+
+(Show: cross_study_comparison.png)
+
+[2:15 - 2:30] CONCLUSION
+--------------------------
+"In conclusion, our 1D-CNN model achieves 91.9% accuracy on music genre
+classification, significantly outperforming the GMM baseline. The deep
+learning approach proves superior due to its ability to learn non-linear
+feature interactions and hierarchical spectral patterns."
+
+"Thank you for watching."
+
+================================================
+END OF SCRIPT

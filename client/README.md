@@ -1,16 +1,43 @@
-# React + Vite
+# 🎨 Music Classification Frontend
+[![Vite](https://img.shields.io/badge/Vite-5.x-646CFF.svg)](https://vitejs.dev/)
+[![React](https://img.shields.io/badge/React-18.x-61DAFB.svg)](https://reactjs.org/)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A premium, high-fidelity user interface for real-time music genre classification. Built with modern web standards, this frontend provides a seamless experience for track analysis and visualization.
 
-Currently, two official plugins are available:
+## ✨ Key Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Premium Glassmorphism**: High-end aesthetic using translucent backgrounds, subtle borders, and harmonious color palettes.
+- **Dynamic Animations**: Smooth transitions and micro-interactions powered by CSS and React.
+- **Real-time Analytics**: Displays genre confidence scores and probability heatmaps.
+- **Responsive Layout**: Fluid design that scales from desktop to tablet devices.
 
-## React Compiler
+## 🛠️ Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Core**: React 18
+- **Build Tool**: Vite (Lightning fast HMR)
+- **Styling**: Vanilla CSS (Custom tokens and modern Flexbox/Grid layouts)
+- **State Management**: React Hooks (useState, useEffect)
 
-## Expanding the ESLint configuration
+## 🚀 Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+If you are running the frontend independently:
+
+```bash
+# Install dependencies
+npm install
+
+# Start production-ready dev server
+npm run dev
+```
+
+The application will be available at `http://localhost:5173`.
+
+## 📁 Structure
+
+- `/src/components`: Reusable UI components (Glass cards, Buttons, etc.)
+- `/src/assets`: Cinematic background images and icons
+- `/src/App.jsx`: Main entry point and API orchestration logic
+- `index.css`: Global design system and modern CSS variables
+
+---
+© 2026 AI Music Research Group

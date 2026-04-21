@@ -80,8 +80,12 @@ app.post('/api/classify', authMiddleware, upload.single('audio'), (req, res) => 
   const originalName = req.file.originalname;
 
   // Call Python script
+  const venvPath = path.join(__dirname, '../venv/bin/python3');
+  const pythonCmd = fs.existsSync(venvPath) ? venvPath : 'python3';
   const pythonScript = path.join(__dirname, '../ml/predict.py');
-  const pythonProcess = spawn('python3', [pythonScript, filePath]);
+  
+  console.log(`Running classification with: ${pythonCmd}`);
+  const pythonProcess = spawn(pythonCmd, [pythonScript, filePath]);
 
   let resultData = '';
   let errorData = '';
@@ -99,6 +103,9 @@ app.post('/api/classify', authMiddleware, upload.single('audio'), (req, res) => 
     fs.unlink(filePath, (err) => {
       if (err) console.error("Error deleting temp file:", err);
     });
+
+    console.log(`Classification result: ${resultData.trim()}`);
+    if (errorData) console.error(`Classification error: ${errorData}`);
 
     if (code !== 0) {
       return res.status(500).json({ error: 'Classification failed', details: errorData });

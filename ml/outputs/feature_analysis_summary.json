@@ -1,0 +1,106 @@
+{
+  "features_to_use": {
+    "MFCC": {
+      "columns": [
+        "mfcc1_mean",
+        "mfcc1_var",
+        "mfcc2_mean",
+        "mfcc2_var",
+        "mfcc3_mean",
+        "mfcc3_var",
+        "mfcc4_mean",
+        "mfcc4_var",
+        "mfcc5_mean",
+        "mfcc5_var",
+        "mfcc6_mean",
+        "mfcc6_var",
+        "mfcc7_mean",
+        "mfcc7_var",
+        "mfcc8_mean",
+        "mfcc8_var",
+        "mfcc9_mean",
+        "mfcc9_var",
+        "mfcc10_mean",
+        "mfcc10_var",
+        "mfcc11_mean",
+        "mfcc11_var",
+        "mfcc12_mean",
+        "mfcc12_var",
+        "mfcc13_mean",
+        "mfcc13_var",
+        "mfcc14_mean",
+        "mfcc14_var",
+        "mfcc15_mean",
+        "mfcc15_var",
+        "mfcc16_mean",
+        "mfcc16_var",
+        "mfcc17_mean",
+        "mfcc17_var",
+        "mfcc18_mean",
+        "mfcc18_var",
+        "mfcc19_mean",
+        "mfcc19_var",
+        "mfcc20_mean",
+        "mfcc20_var"
+      ],
+      "reason": "MFCCs capture the spectral envelope of audio signals, encoding timbral characteristics that distinguish genres. Rock/metal have harsh timbres (high-energy upper MFCCs), while jazz/classical have smoother profiles."
+    },
+    "Spectral Centroid": {
+      "columns": [
+        "spectral_centroid_mean",
+        "spectral_centroid_var"
+      ],
+      "reason": "Spectral centroid measures perceived \"brightness.\" Metal and rock have high centroids due to distorted guitars, while blues and jazz have lower centroids from warm, bass-heavy instruments."
+    },
+    "Zero Crossing Rate": {
+      "columns": [
+        "zero_crossing_rate_mean",
+        "zero_crossing_rate_var"
+      ],
+      "reason": "ZCR distinguishes percussive, noisy signals (high ZCR in metal/rock) from smoother, tonal signals (low ZCR in classical/jazz). It is a simple but effective proxy for signal noisiness."
+    }
+  },
+  "features_to_exclude": {
+    "Tempo": {
+      "columns": [
+        "tempo"
+      ],
+      "reason": "Tempo overlaps heavily across genres. A jazz piece can be 60 BPM or 200 BPM. Disco and metal can share similar tempos. The feature has low discriminative power and high intra-class variance."
+    },
+    "Harmony/Perceptr": {
+      "columns": [
+        "harmony_mean",
+        "harmony_var",
+        "perceptr_mean",
+        "perceptr_var"
+      ],
+      "reason": "These are redundant with MFCCs, which already capture harmonic content through the cepstral representation. Including both adds multicollinearity without improving classification accuracy."
+    },
+    "RMS Energy": {
+      "columns": [
+        "rms_mean",
+        "rms_var"
+      ],
+      "reason": "RMS energy is highly dependent on recording conditions, mastering levels, and playback normalization. A quietly recorded metal track may have lower RMS than a loudly mastered pop track, making this feature unreliable."
+    }
+  },
+  "mutual_information_top10": {
+    "perceptr_var": 0.5087698748733889,
+    "spectral_bandwidth_mean": 0.4233134325761019,
+    "rms_var": 0.3949107872980364,
+    "rolloff_mean": 0.38409108313700013,
+    "chroma_stft_mean": 0.3749797562431856,
+    "spectral_centroid_var": 0.36626727955415506,
+    "mfcc1_mean": 0.3662493850064341,
+    "spectral_centroid_mean": 0.35243787152472406,
+    "rms_mean": 0.3330497339830254,
+    "mfcc2_mean": 0.3150005208568536
+  },
+  "ablation_study": {
+    "All Features (57)": 0.5304304304304305,
+    "Without Tempo (56)": 0.5287287287287288,
+    "Without Harmony/Perceptr (53)": 0.5167167167167166,
+    "Without RMS Energy (55)": 0.5294294294294294,
+    "Selected Features Only (50)": 0.5023023023023023
+  }
+}

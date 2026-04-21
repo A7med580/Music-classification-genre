@@ -14,6 +14,7 @@ ml/__pycache__
 # Environment
 .env
 .DS_Store
+venv/
 
 # Build
 dist/

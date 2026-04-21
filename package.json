@@ -7,7 +7,9 @@
     "start": "concurrently \"npm run server\" \"npm run client\"",
     "server": "node server/index.js",
     "client": "cd client && npm run dev",
-    "setup": "python3 ml/train_model.py"
+    "setup": "python3 ml/train_model.py",
+    "install-client": "cd client && npm install",
+    "setup-all": "npm install && npm run install-client && npm run setup"
   },
   "repository": {
     "type": "git",

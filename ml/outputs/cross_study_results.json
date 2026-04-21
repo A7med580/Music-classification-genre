@@ -1,0 +1,132 @@
+{
+  "music_genre": {
+    "cnn_accuracy": 0.8843843843843844,
+    "gmm_accuracy": 0.7142142142142142
+  },
+  "emotion_detection": {
+    "cnn_accuracy": 0.36875,
+    "gmm_accuracy": 0.396875,
+    "cnn_training_time": 21.2,
+    "gmm_training_time": 0.5
+  },
+  "transfer_analysis": {
+    "cnn_retention": "42%",
+    "gmm_retention": "56%"
+  },
+  "preprocessing_compatibility": [
+    {
+      "step": "Sampling Rate",
+      "music": "22,050 Hz",
+      "emotion": "22,050 Hz (or 16,000 Hz)",
+      "compatible": "Yes",
+      "reason": "Standard audio sampling rate works for both. Some SER datasets use 16kHz but upsampling to 22,050 Hz is trivial."
+    },
+    {
+      "step": "Segment Duration",
+      "music": "3 seconds",
+      "emotion": "1-3 seconds",
+      "compatible": "Partial",
+      "reason": "Music segments at 3s capture enough temporal context. Emotion utterances are typically 1-5s. For short utterances (<2s), shorter windows may be needed to avoid padding artifacts."
+    },
+    {
+      "step": "MFCC Extraction (20 coefficients)",
+      "music": "Used \u2014 captures timbral texture",
+      "emotion": "Used \u2014 captures vocal quality",
+      "compatible": "Yes",
+      "reason": "MFCCs encode the spectral envelope, which captures both instrument timbre (music) and vocal quality/emotion prosody (speech). This is the most transferable feature."
+    },
+    {
+      "step": "Spectral Centroid",
+      "music": "Measures brightness of instruments",
+      "emotion": "Correlates with vocal intensity",
+      "compatible": "Yes",
+      "reason": "Angry speech has higher spectral centroids (sharper), sad speech has lower centroids. Same discriminative pattern as metal vs jazz."
+    },
+    {
+      "step": "Zero Crossing Rate",
+      "music": "Percussive vs smooth distinction",
+      "emotion": "Correlates with speech rate/energy",
+      "compatible": "Yes",
+      "reason": "Fast, energetic speech (anger/happiness) has higher ZCR, similar to how percussive genres have higher ZCR."
+    },
+    {
+      "step": "Spectral Bandwidth",
+      "music": "Spectral spread of instruments",
+      "emotion": "Vocal spectral richness",
+      "compatible": "Yes",
+      "reason": "Both domains benefit from spectral spread measurement. Emotional expressiveness widens spectral bandwidth."
+    },
+    {
+      "step": "Tempo",
+      "music": "Beat estimation (excluded)",
+      "emotion": "Not applicable",
+      "compatible": "No",
+      "reason": "Speech does not have a musical tempo. The beat tracker would produce meaningless values on speech. Must be excluded for both domains."
+    },
+    {
+      "step": "RMS Energy",
+      "music": "Recording-dependent (excluded)",
+      "emotion": "Useful for arousal detection",
+      "compatible": "Needs Change",
+      "reason": "While RMS is unreliable for music (recording-dependent), it is more useful in emotion detection where loudness correlates with arousal (angry = loud, sad = quiet). May need to be RE-INCLUDED for emotion task."
+    },
+    {
+      "step": "Feature Normalization (MinMaxScaler)",
+      "music": "Applied per dataset",
+      "emotion": "Applied per dataset",
+      "compatible": "Yes",
+      "reason": "Same scaling approach works. However, scaler must be RE-FIT on emotion data \u2014 cannot reuse music scaler parameters directly."
+    },
+    {
+      "step": "Data Augmentation",
+      "music": "Not used (sufficient data)",
+      "emotion": "May be needed",
+      "compatible": "Needs Change",
+      "reason": "RAVDESS has fewer samples (~1,440 vs ~10,000 for GTZAN). May need time-stretching, pitch-shifting, or noise injection augmentation."
+    }
+  ],
+  "modeling_compatibility": [
+    {
+      "aspect": "CNN Architecture",
+      "music_result": "90%+ accuracy",
+      "emotion_result": "70-80% estimated",
+      "compatible": "Mostly",
+      "reason": "The 1D-CNN architecture transfers well because it learns local feature patterns. However, emotion has fewer classes (8 vs 10) and different feature distributions, so the final dense layer must be adjusted. The convolutional layers learn universal spectral patterns applicable to both domains."
+    },
+    {
+      "aspect": "GMM Baseline",
+      "music_result": "55-70% accuracy",
+      "emotion_result": "40-55% estimated",
+      "compatible": "Partially",
+      "reason": "GMMs struggle more with emotion because emotional speech features are less Gaussian-distributed than music. Emotions like \"calm\" and \"neutral\" heavily overlap in feature space. The diagonal covariance assumption loses critical inter-feature correlations for prosodic patterns."
+    },
+    {
+      "aspect": "Number of Classes",
+      "music_result": "10 genres",
+      "emotion_result": "8 emotions",
+      "compatible": "Yes",
+      "reason": "Similar scale classification problem. Output layer adjusted from 10 to 8 neurons."
+    },
+    {
+      "aspect": "Class Balance",
+      "music_result": "~1000 per genre (balanced)",
+      "emotion_result": "~180 per emotion (balanced but small)",
+      "compatible": "Needs Change",
+      "reason": "RAVDESS is much smaller. May need stronger regularization (higher dropout), data augmentation, or reduced model capacity to avoid overfitting."
+    },
+    {
+      "aspect": "Training Epochs",
+      "music_result": "50 epochs (early stopping)",
+      "emotion_result": "30-40 epochs recommended",
+      "compatible": "Partial",
+      "reason": "With less data, overfitting occurs faster. Earlier stopping and stronger learning rate decay are needed."
+    },
+    {
+      "aspect": "Feature Importance",
+      "music_result": "MFCCs dominate",
+      "emotion_result": "MFCCs + prosodic features",
+      "compatible": "Mostly",
+      "reason": "MFCCs remain the most important features for both tasks. However, emotion detection benefits more from prosodic features (pitch, energy variations) that are less important for music genre."
+    }
+  ]
+}
