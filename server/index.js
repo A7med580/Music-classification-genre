@@ -3,9 +3,7 @@ const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
 const { spawn } = require('child_process');
-const { userDB, historyDB } = require('./db');
-const { authMiddleware, JWT_SECRET } = require('./auth');
-const jwt = require('jsonwebtoken');
+const { historyDB } = require('./db');
 const fs = require('fs');
 
 const app = express();
@@ -26,66 +24,34 @@ if (!fs.existsSync(path.join(__dirname, '../uploads'))) {
   fs.mkdirSync(path.join(__dirname, '../uploads'));
 }
 
-// --- AUTH ROUTES ---
-
-app.post('/api/auth/register', async (req, res) => {
-  const { username, password } = req.body;
-  if (!username || !password) return res.status(400).json({ error: 'Missing credentials' });
-
-  const result = await userDB.register(username, password);
-  if (result.error) return res.status(400).json(result);
-
-  res.status(201).json(result);
-});
-
-app.post('/api/auth/login', async (req, res) => {
-  const { username, password } = req.body;
-  const user = await userDB.login(username, password);
-
-  if (!user) return res.status(401).json({ error: 'Invalid username or password' });
-
-  const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '24h' });
-  res.json({ user, token });
-});
-
-app.get('/api/auth/me', authMiddleware, (req, res) => {
-  const user = userDB.getUser(req.userId);
-  if (!user) return res.status(404).json({ error: 'User not found' });
-  res.json(user);
-});
-
-app.put('/api/users/settings', authMiddleware, (req, res) => {
-  const settings = userDB.updateSettings(req.userId, req.body);
-  res.json(settings);
-});
-
 // --- CLASSIFICATION ROUTES ---
 
-app.get('/api/history', authMiddleware, (req, res) => {
-  const history = historyDB.getForUser(req.userId);
+app.get('/api/history', (req, res) => {
+  const history = historyDB.getAll();
   res.json(history);
 });
 
-app.delete('/api/history/:id', authMiddleware, (req, res) => {
-  const success = historyDB.delete(req.userId, req.params.id);
+app.delete('/api/history/:id', (req, res) => {
+  const success = historyDB.delete(req.params.id);
   res.json({ success });
 });
 
-app.post('/api/classify', authMiddleware, upload.single('audio'), (req, res) => {
+app.post('/api/classify', upload.single('audio'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No audio file provided' });
   }
 
   const filePath = req.file.path;
   const originalName = req.file.originalname;
+  const modelName = req.body.model || 'CNN';
 
   // Call Python script
   const venvPath = path.join(__dirname, '../venv/bin/python3');
   const pythonCmd = fs.existsSync(venvPath) ? venvPath : 'python3';
   const pythonScript = path.join(__dirname, '../ml/predict.py');
   
-  console.log(`Running classification with: ${pythonCmd}`);
-  const pythonProcess = spawn(pythonCmd, [pythonScript, filePath]);
+  console.log(`Running classification with: ${pythonCmd} --model ${modelName}`);
+  const pythonProcess = spawn(pythonCmd, [pythonScript, '--file', filePath, '--model', modelName]);
 
   let resultData = '';
   let errorData = '';
@@ -112,13 +78,28 @@ app.post('/api/classify', authMiddleware, upload.single('audio'), (req, res) => 
     }
 
     try {
-      const prediction = JSON.parse(resultData.trim());
+      // Find the last valid JSON output (in case there are tf warnings printed)
+      const outputLines = resultData.trim().split('\n');
+      let prediction = null;
+      for (let i = outputLines.length - 1; i >= 0; i--) {
+          try {
+              prediction = JSON.parse(outputLines[i]);
+              break;
+          } catch(e) {}
+      }
 
-      // Save to DB for specific user
-      const entry = historyDB.add(req.userId, {
+      if (!prediction) {
+          throw new Error("Could not find JSON output");
+      }
+
+      // Save to DB
+      const entry = historyDB.add({
         filename: originalName,
         genre: prediction.genre,
-        confidence: prediction.confidence
+        genre_confidence: prediction.genre_confidence,
+        emotion: prediction.emotion,
+        emotion_confidence: prediction.emotion_confidence,
+        model_used: prediction.model_used
       });
 
       res.json(entry);
