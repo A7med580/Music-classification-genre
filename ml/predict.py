@@ -41,8 +41,7 @@ MODELS_PATH = os.path.join(MODEL_DIR, 'models')
 def load_sklearn_model(path):
     if not os.path.exists(path):
         raise FileNotFoundError(f"Model file not found at: {path}")
-    with open(path, 'rb') as f:
-        return pickle.load(f)
+    return joblib.load(path)
 
 def main():
     parser = argparse.ArgumentParser()
@@ -106,8 +105,22 @@ def main():
             sys.exit(1)
 
         if is_dl:
-            g_model = tf.keras.models.load_model(g_model_path)
-            e_model = tf.keras.models.load_model(e_model_path)
+            try:
+                # Try loading with default settings first
+                g_model = tf.keras.models.load_model(g_model_path)
+                e_model = tf.keras.models.load_model(e_model_path)
+            except Exception as e:
+                # If it fails (e.g. quantization_config error), try loading without safe mode
+                # or with custom objects if needed.
+                try:
+                    g_model = tf.keras.models.load_model(g_model_path, safe_mode=False)
+                    e_model = tf.keras.models.load_model(e_model_path, safe_mode=False)
+                except Exception as e2:
+                    print(json.dumps({
+                        "error": "Model Loading Failed",
+                        "details": f"First attempt: {str(e)}\nSecond attempt (safe_mode=False): {str(e2)}"
+                    }))
+                    sys.exit(1)
             
             g_preds = g_model.predict(features_input, verbose=0)[0]
             e_preds = e_model.predict(features_input, verbose=0)[0]
