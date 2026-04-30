@@ -3,7 +3,7 @@
 ANALYSIS: Why CNN Outperforms GMM
 ========================================
 
-CNN achieved 88.4% accuracy vs GMM's 71.4% (+17.0 percentage points).
+CNN achieved 88.2% accuracy vs GMM's 71.4% (+16.8 percentage points).
 
 1. NON-LINEAR DECISION BOUNDARIES: CNNs learn complex, non-linear feature
    interactions through multiple convolutional layers. GMMs assume each genre

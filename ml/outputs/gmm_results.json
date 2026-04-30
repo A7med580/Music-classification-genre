@@ -4,7 +4,7 @@
   "precision_macro": 0.7146762287432963,
   "recall_macro": 0.7142361809045226,
   "f1_macro": 0.7141168083168319,
-  "training_time_seconds": 0.6,
+  "training_time_seconds": 0.8,
   "n_components": 16,
   "per_genre": {
     "blues": {

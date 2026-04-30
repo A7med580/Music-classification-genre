@@ -35,11 +35,17 @@ def main():
     from models.cnn_model import train_cnn
     cnn_results = train_cnn(epochs=50, batch_size=32)
 
-    # Step 3: GMM Training
+    # Step 3: GMM Baseline Training
     print("\n\n>>> STEP 3: GMM Baseline Training <<<")
     print("-" * 40)
     from models.gmm_baseline import train_gmm
     gmm_results = train_gmm(n_components=16)
+
+    # Step 3b: HMM Baseline Training
+    print("\n\n>>> STEP 3b: HMM Baseline Training <<<")
+    print("-" * 40)
+    from models.hmm_baseline import train_hmm
+    hmm_results = train_hmm(n_components=4)
 
     # Step 4: Model Comparison
     print("\n\n>>> STEP 4: Model Comparison <<<")
@@ -53,7 +59,8 @@ def main():
     print("=" * 60)
     print(f"\n  CNN Accuracy:  {cnn_results['accuracy']*100:.1f}%")
     print(f"  GMM Accuracy:  {gmm_results['accuracy']*100:.1f}%")
-    print(f"  Difference:    +{(cnn_results['accuracy']-gmm_results['accuracy'])*100:.1f} points (CNN advantage)")
+    print(f"  HMM Accuracy:  {hmm_results['accuracy']*100:.1f}%")
+    print(f"  Difference:    +{(cnn_results['accuracy']-max(gmm_results['accuracy'], hmm_results['accuracy']))*100:.1f} points (CNN vs best baseline)")
     print(f"\n  All outputs saved to: ml/outputs/")
     print("=" * 60 + "\n")
 
